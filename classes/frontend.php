@@ -30,7 +30,7 @@ class frontend extends \core_availability\frontend {
     /**
      * @var array Cached init parameters
      */
-    protected $cacheparams = array();
+    protected $cacheparams = [];
 
     /**
      * @var string IDs of course, cm, and section for cache (if any)
@@ -38,7 +38,7 @@ class frontend extends \core_availability\frontend {
     protected $cachekey = '';
 
     protected function get_javascript_strings() {
-        return array('option_complete', 'label_cm', 'label_completion');
+        return ['option_complete', 'option_incomplete', 'label_cm', 'label_completion'];
     }
 
     protected function get_javascript_init_params($course, \cm_info $cm = null,
@@ -52,24 +52,24 @@ class frontend extends \core_availability\frontend {
             // to fill the dropdown.
             $context = \context_course::instance($course->id);
             //get all course name
-            $datcms = array();
+            $datcms = [];
             global $DB;
             $sql2 = "SELECT * FROM {course} 
                     ORDER BY fullname ASC";
             $other = $DB->get_records_sql($sql2);
             //$other = get_courses();
-            foreach ($other as $othercm) {
+            foreach ($other as $id => $othercm) {
                 //disable not created course and default course
-                if(($othercm->category > 0) && ($othercm->id != $course->id)){
-                        $datcms[] = (object)array(
-                            'id' => $othercm->id,
-                            'name' => format_string($othercm->fullname, true, array('context' => $context))
+                if(($othercm->category > 0) && ($course->id != $id)){
+                        $datcms[] = (object)[
+                            'id' => $id,
+                            'name' => format_string($othercm->fullname, true, ['context' => $context])
                             // 'completiongradeitemnumber' => $othercm->completiongradeitemnumber
-                        );
+                        ];
                 }
             }
             $this->cachekey = $cachekey;
-            $this->cacheinitparams = array($datcms);
+            $this->cacheinitparams = [$datcms];
         }
         return $this->cacheinitparams;
     }
