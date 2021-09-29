@@ -60,7 +60,7 @@ class condition extends \core_availability\condition {
         }
     }
 
-	public function save(): stdClass {
+	public function save() {
         return (object) [
             'type' => 'othercompleted',
             'cm' => $this->cmid,
