@@ -135,15 +135,10 @@ class condition extends \core_availability\condition {
     }
 
     //get details restrict access 
-    public function get_description($full, $not, \core_availability\info $info): string {
+    public function get_description($full, $not, \core_availability\info $info) {
+      global $DB;
         // Get name for module.
-        $modc = get_courses();
-
-        foreach ($modc as $modcs) {
-            if($modcs->id == $this->cmid){
-                $modname = $modcs->fullname;
-            }
-        }
+        $modname = $DB->get_record('course', ['id' => $this->cmid])->fullname;
 
         // Work out which lang string to use.
         if ($not) {
